@@ -12,8 +12,6 @@ module VMM #( parameter l = 5, parameter n = 5, parameter m = 5)
     output reg [n-1:0] j,
     output wire next_o
 );
-    ////// Register next_o //////
-  
     ////// Register vmm_out //////
     
     always @(posedge vmm_clk or negedge rst_) begin
