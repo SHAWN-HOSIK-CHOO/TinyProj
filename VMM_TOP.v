@@ -6,7 +6,7 @@ module VMM_TOP
     output wire [17:0] LEDR,
     output wire [0:6] HEX0, HEX1, HEX4, HEX5, HEX7, HEX2, HEX3, HEX6
 );
- 
+  
     wire reset_;
     assign reset_ = KEY[0];
 
