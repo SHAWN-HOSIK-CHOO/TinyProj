@@ -1,5 +1,5 @@
 module VMM #( parameter l = 5, parameter n = 5, parameter m = 5)
-(  
+( 
     input wire vmm_clk,
     input wire rst_,
     input wire done_i,
@@ -13,7 +13,7 @@ module VMM #( parameter l = 5, parameter n = 5, parameter m = 5)
     output wire next_o
 );
     ////// Register vmm_out //////
-    
+     
     always @(posedge vmm_clk or negedge rst_) begin
         if (!rst_) begin
             vmm_out <= 8'b00000000;

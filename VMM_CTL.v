@@ -11,7 +11,7 @@ module VMM_CTL
                 inc_i_ctl, sel_3_ctl, cl_j_ctl, inc_j_ctl,
                 cl_k_ctl, inc_k_ctl, next_o_ctl
 );
-
+ 
 parameter S0 = 3'b000, S1 = 3'b001, S2 = 3'b010, S3 = 3'b011,
             S4 = 3'b100, S5 = 3'b101, S6 = 3'b110, S7 = 3'b111;
 
