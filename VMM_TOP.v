@@ -1,5 +1,5 @@
 module VMM_TOP 
-(
+( 
     input wire CLOCK_50,
     input wire [3:0] KEY,
     input wire [1:0] SW,
