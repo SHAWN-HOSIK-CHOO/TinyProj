@@ -24,28 +24,20 @@ module VMM_TOP
     ////// Datapath //////
 
     ////// VMM module //////
-    wire[7:0] out;
+    wire[9:0] out;
     wire[4:0] i;
     wire[4:0] j;
     wire[2:0] State;
     wire Done; // This heads from VMM module to bin2bcd module
     wire Next;
 
-    //debug
-    wire[3:0] dA;
-    wire[3:0] dB;
-    bin7seg H3(dA,HEX3);
-    bin7seg H2(dB,HEX2);
-    wire[3:0] dR;
-    bin7seg H6(dR,HEX6);
-    //debug end
-
     assign Done = ~KEY[1];
-    VMM #(.l(5),.n(5),.m(5)) vmm_module (.debugR(dR),.debugA(dA),.debugB(dB),.vmm_clk(Clk),.rst_(reset_), .done_i(Done), .next_o(Next),.state_o(State),.vmm_out(out),.i(i),.j(j));
+    VMM #(.l(5),.n(5),.m(5)) vmm_module (.vmm_clk(Clk),.rst_(reset_), .done_i(Done), .next_o(Next),.state_o(State),.vmm_out(out),.i(i),.j(j));
 
     bin7seg H7({1'b0,State},HEX7);
     bin7seg H5(i[3:0],HEX5);
     bin7seg H4(j[3:0],HEX4);
+    bin7seg H2(out[9:8],HEX2);
     bin7seg H1(out[7:4],HEX1);
     bin7seg H0(out[3:0],HEX0);
 

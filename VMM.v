@@ -4,10 +4,7 @@ module VMM #( parameter l = 5, parameter n = 5, parameter m = 5)
     input wire rst_,
     input wire done_i,
     output wire [2:0] state_o,
-    output wire [3:0] debugA,
-    output wire [3:0] debugB,
-    output wire [3:0] debugR,
-    output reg [7:0] vmm_out,
+    output reg [9:0] vmm_out,
     output reg [l-1:0] i, 
     output reg [n-1:0] j,
     output wire next_o
@@ -16,7 +13,7 @@ module VMM #( parameter l = 5, parameter n = 5, parameter m = 5)
       
     always @(posedge vmm_clk or negedge rst_) begin
         if (!rst_) begin
-            vmm_out <= 8'b00000000;
+            vmm_out <= 10'b0000000000;
         end
         else if (next_o) begin
             vmm_out <= C[i][j];
@@ -28,16 +25,12 @@ module VMM #( parameter l = 5, parameter n = 5, parameter m = 5)
     
 
     ////// Register A and B //////
-    (*ram_init_file="ram32x4_a.mif"*)reg [3:0] A[l-1:0][m-1:0];
-    (*ram_init_file="ram32x4_b.mif"*)reg [3:0] B[m-1:0][n-1:0];
+    (*ram_init_file="ram32x4_a.mif"*)reg [4:0] A[l-1:0][m-1:0];
+    (*ram_init_file="ram32x4_b.mif"*)reg [4:0] B[m-1:0][n-1:0];
 
-    //debug
-    assign debugA = A[i][j];
-    assign debugB = B[i][j];
-    assign debugR = res[3:0];
 
     ////// Register C //////
-    reg [7:0] C[l-1:0][n-1:0];  
+    reg [9:0] C[l-1:0][n-1:0];  
     wire c_w_en;                 
 
     always @(posedge vmm_clk) begin
@@ -50,16 +43,16 @@ module VMM #( parameter l = 5, parameter n = 5, parameter m = 5)
     end
 
     ////// Register res //////
-    reg [7:0] res;    
+    reg [9:0] res;    
     wire cl_res;
     wire ld_res;                 
 
     always @(posedge vmm_clk or negedge rst_) begin
         if(!rst_) begin
-            res <= 8'b00000000;
+            res <= 10'b0000000000;
         end
         else if (cl_res) begin
-            res <= 8'b00000000;
+            res <= 10'b0000000000;
         end
         else if (ld_res) begin
             res <= res + A[i][k] * B[k][j];

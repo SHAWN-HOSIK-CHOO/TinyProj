@@ -168,7 +168,7 @@ begin
         default: ;
     endcase
 end
-
+ 
 ////// State Registers //////
 always @(posedge clk or negedge rst_) begin
     if (!rst_) begin
