@@ -3,11 +3,11 @@ module VMM #( parameter l = 5, parameter n = 5, parameter m = 5)
     input wire vmm_clk,
     input wire rst_,
     input wire done_i,
+    input wire next_i,
     output wire [2:0] state_o,
     output reg [9:0] vmm_out,
     output reg [l-1:0] i, 
-    output reg [n-1:0] j,
-    output wire next_o
+    output reg [n-1:0] j
 );
     ////// Register vmm_out //////
       
@@ -15,7 +15,7 @@ module VMM #( parameter l = 5, parameter n = 5, parameter m = 5)
         if (!rst_) begin
             vmm_out <= 10'b0000000000;
         end
-        else if (next_o) begin
+        else if (next_i) begin
             vmm_out <= C[i][j];
         end
         else begin
@@ -139,7 +139,7 @@ module VMM #( parameter l = 5, parameter n = 5, parameter m = 5)
     VMM_CTL vmm_control(.clk(vmm_clk), .rst_(rst_), .ilt_l_or_3_ctl(ilt_l_or_3),
                         .jltn_ctl(jltn), .kltm_ctl(kltm), .c_w_en_ctl(c_w_en),
                         .cl_res_ctl(cl_res), .ld_res_ctl(ld_res), .cl_i_ctl(cl_i), .inc_i_ctl(inc_i),
-                        .sel_3_ctl(sel_3), .cl_j_ctl(cl_j), .inc_j_ctl(inc_j), .next_o_ctl(next_o),
+                        .sel_3_ctl(sel_3), .cl_j_ctl(cl_j), .inc_j_ctl(inc_j),
                         .cl_k_ctl(cl_k), .inc_k_ctl(inc_k), .done_i_ctl(done_i), .state(state_o));
 
 endmodule

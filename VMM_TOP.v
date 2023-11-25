@@ -21,26 +21,45 @@ module VMM_TOP
     assign Clk = Clock_Down[24];
     assign LEDR[17] = Clk;
 
-    ////// Datapath //////
-
     ////// VMM module //////
-    wire[9:0] out;
-    wire[4:0] i;
-    wire[4:0] j;
+    wire[9:0] out;		//MUST match bcd_module input
+    wire[4:0] i;        //MUST be equivalent to l
+    wire[4:0] j;        //MUST be equivalent to n
     wire[2:0] State;
-    wire Done; // This heads from VMM module to bin2bcd module
+    wire Done; 
     wire Next;
+	assign Next = ~KEY[1];
+	assign LEDR[0] = Done;
+  
+    VMM #(.l(5),.n(5),.m(5)) vmm_module (.vmm_clk(Clk),.rst_(reset_), .done_i(Done), .next_i(Next),.state_o(State),.vmm_out(out),.i(i),.j(j));
 
-    assign Done = ~KEY[1];
-    VMM #(.l(5),.n(5),.m(5)) vmm_module (.vmm_clk(Clk),.rst_(reset_), .done_i(Done), .next_o(Next),.state_o(State),.vmm_out(out),.i(i),.j(j));
+	//////bin2bcd module //////
 
+	wire[3:0] A0_out;
+	wire[3:0] A4_out;
+	wire[3:0] A8_out;
+	wire[3:0] A12_out;
+
+	bin2bcd #(.No_bits(10)) bcd_module(.bin2bcd_clk(Clk),.reset_(reset_),.start_i(Next),.vmm_out(out),.done_o(Done),.A12(A12_out),.A8(A8_out),.A4(A4_out),.A0(A0_out),.K(K));
+
+	//Debug
+	wire[3:0] K;
+	bin7seg H6(K,HEX6);
+	/*
+	bin7seg U2 ({2'b00,out[9:8]},  HEX2);
+	bin7seg U1 (out[7:4],  HEX1);
+	bin7seg U0 (out[3:0],  HEX0);
+	*/
+	//////Output Display
     bin7seg H7({1'b0,State},HEX7);
     bin7seg H5(i[3:0],HEX5);
     bin7seg H4(j[3:0],HEX4);
-    bin7seg H2(out[9:8],HEX2);
-    bin7seg H1(out[7:4],HEX1);
-    bin7seg H0(out[3:0],HEX0);
-
+	
+	bin7seg U3 (A12_out, HEX3);
+	bin7seg U2 (A8_out,  HEX2);
+	bin7seg U1 (A4_out,  HEX1);
+	bin7seg U0 (A0_out,  HEX0);
+	
 endmodule
 
 module bin7seg (B, display);  // 2~12
